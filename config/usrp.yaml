@@ -1,0 +1,28 @@
+# config/usrp.yaml
+---
+
+# 0-NOTSET, 1-DEBUG, 2-INFO, 3-WARNING, 4-ERROR, 5-CRITICAL
+max_log_display_level: 2
+
+# set to true to run qcal routine
+qcal: false
+
+# 0 - sc8, 1 - sc16
+if_sample_type: 0
+
+# device_args: name=MyB210
+device_args: name=B200mini
+
+subdev: A:A
+antenna: RX2
+wirefmt: sc8
+clock_ref: internal
+center_frequency: 1575420000
+sampling_frequency: 5000000
+gain: 75
+total_time: 0.0
+
+samples_per_message: 10000
+circ_buff_capacity: 100000
+
+

@@ -1,0 +1,10 @@
+@PACKAGE_INIT@
+
+find_package(if_utils REQUIRED)
+find_package(logutils REQUIRED)
+find_package(UHD REQUIRED)
+find_package(Boost REQUIRED COMPONENTS system thread program_options date_time filesystem)
+
+if(NOT TARGET /@PROJECT_NAME@)
+    include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@Targets.cmake")
+endif(NOT TARGET /@PROJECT_NAME@)

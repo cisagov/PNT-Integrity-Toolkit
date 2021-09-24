@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+  <style type="text/css">
+    html {
+      height: 100%
+    }
+
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0
+    }
+
+    #map_canvas {
+      height: 100%
+    }
+  </style>
+  <script type="text/javascript"
+    src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB5OWr_ru74RX1Dt4CBXxiQB4CTO4L6yZY">
+    </script>
+  <script type="text/javascript">
+    var map = null;
+    // var paths = null;
+    // var marker = null;
+    var paths = new Array(6).fill(null);
+    var marker = new Array(6).fill(null);
+    var errorCircle = new Array(6).fill(null);
+
+
+    var colorArray = ['#EE4522', '#229EEE', '#FFC300', '#A83017',
+      '#1875B0', '#CA9B00', '#00B3E6', '#999966', '#99FF99',
+      '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A',
+      '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC',
+      '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC',
+      '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399',
+      '#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680',
+      '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933',
+      '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3',
+      '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
+
+    var colorArray2 = ['#4DB3FF', '#1AB399',
+      '#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680',
+      '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933',
+      '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3',
+      '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
+
+    //Initaite map
+    function initMap() {
+      var mapProp = {
+        zoom: 12,
+        center: { lat: 32.537058, lng: -85.518870 },
+        mapTypeId: 'satellite'
+      };
+      map = new google.maps.Map(document.getElementById("map_canvas"), mapProp);
+    }
+
+    function updateMap(lat, lng, idx, heading, error, colorIdx) {
+      position = { lat: lat, lng: lng };
+      var newCord = new google.maps.LatLng(lat, lng);
+      if (marker[idx] == null) {
+        // initialize marker
+        paths[idx] = new google.maps.Polyline({
+          strokeColor: colorArray[colorIdx],
+          // strokeColor: "#0000FF",
+          strokeOpacity: 0.8,
+          strokeWeight: 2
+        });
+        if (error > 0) {
+          errorCircle[idx] = new google.maps.Circle({
+            strokeColor: colorArray[colorIdx],
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: colorArray[colorIdx],
+            fillOpacity: 0.20,
+            map: map,
+            center: newCord,
+            radius: error
+          });
+        }
+        paths[idx].setMap(map);
+        map.setCenter(position);
+        if (heading < 1000) {
+          marker[idx] = new google.maps.Marker({
+            position: position,
+            map: map,
+            title: "Last Pos",
+            icon: {
+              path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+              rotation: heading,
+              scale: 3,
+              fillColor: colorArray[colorIdx],
+              fillOpacity: 1.0,
+              strokeColor: colorArray[colorIdx]
+            },
+          });
+        } else {
+          marker[idx] = new google.maps.Marker({
+            position: position,
+            map: map,
+            title: "Last Pos",
+            icon: {
+              path: google.maps.SymbolPath.CIRCLE,
+              scale: 3,
+              fillColor: colorArray[colorIdx],
+              fillOpacity: 1.0,
+              strokeColor: colorArray[colorIdx]
+            },
+          });
+        }
+
+      } else {
+        marker[idx].setPosition(newCord);
+        if (error > 0) {
+          errorCircle[idx].setCenter(newCord);
+          errorCircle[idx].setRadius(error);
+        }
+        if (heading < 1000) {
+          var icon = marker[idx].getIcon();
+          icon.rotation = heading;
+          marker[idx].setIcon(icon);
+        }
+        console.log("Update marker");
+      }
+      var path = paths[idx].getPath();
+      path.push(newCord);
+      paths[idx].setPath(path);
+    }
+
+    function resetMarkers() {
+
+      var ii;
+      for (ii = 0; ii < marker.length; ii++) {
+        if (marker[ii]) {
+          marker[ii].setMap(null);
+          marker[ii] = null;
+        }
+      }
+
+      for (ii = 0; ii < paths.length; ii++) {
+        if (paths[ii]) {
+          paths[ii].setPath([]);
+        }
+      }
+
+      for (ii = 0; ii < errorCircle.length; ii++) {
+        if (errorCircle[ii]) {
+          errorCircle[ii].setMap(null);
+          errorCircle[ii] = null;
+        }
+      }
+    }
+
+  </script>
+  <!-- <script src="https://maps.googleapis.com/maps/api/js?callback=locate"></script> -->
+</head>
+
+<body onload="initMap()">
+  <div id="map_canvas" style="width:100%; height:100%"></div>
+</body>
+
+</html>

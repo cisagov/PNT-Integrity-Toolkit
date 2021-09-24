@@ -1,0 +1,9 @@
+repositories:
+  serial:
+    type: git
+    url: git@git.is4s.com:common/serial.git
+    version: v1.4.0
+  ublox:
+    type: git
+    url: git@git.is4s.com:sensors/ublox.git
+    version: v4.0.0

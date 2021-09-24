@@ -1,0 +1,113 @@
+# ================== GENERIC PARAMETERS ========================================
+rx1_name: rcvr1
+rx2_name: rcvr2
+
+# ================== AOA Check PARAMETERS ======================================
+enable_aoa_check: true
+aoa_check_name: aoa_check
+aoa_check_use_carrier_phase: false
+aoa_check_single_diff_thresh: 2.0
+aoa_check_range_thresh: 3.0
+aoa_check_prn_count_thresh: 5
+aoa_check_level_period: 3.0
+aoa_check_inconsistent_thresh: 0.3
+aoa_check_unassured_thresh: 0.5
+aoa_check_assured_thresh: 0.5
+aoa_check_single_diff_fail_limit: 0.5
+aoa_check_weight: 1.0
+
+# =============== Range-position check parameters ==============================
+enable_rng_pos_check: true
+rng_pos_check_name: rng_pos_check
+rng_pos_check_level_period: 2.0
+rng_pos_check_weight: 1.0
+
+enable_static_mode: true
+rx1_rx2_baseline: 15.0
+
+# ===============Acquisition check parameters===================================
+enable_acquisition_check: true
+acq_chek_name: acq_check
+if_data_sampling_rate: 5000000
+if_data_intermediate_freq: 0.0
+acq_check_search_band: 10000.0
+acq_check_search_step_size: 500.0
+acq_check_integration_period: 0.001
+acq_check_code_freq_basis: 1023000.0
+acq_check_code_length: 1023
+high_power_threshold: 10000000
+peak_ratio_threshold: 3.0
+acquisition_threshold: 1000000
+acq_check_level_period: 5.0
+acq_check_inconsistent_thresh: 2.0
+acq_check_unassured_thresh: 4.0
+acq_check_weight: 1.0
+
+# ===============Static position check parameters===============================
+enable_static_pos_check: true
+static_pos_check_name: static_pos_check
+static_pos_check_level_period: 10.0
+survey_init: false
+num_pos_for_init: 60
+static_pos_check_window_size: 10
+pos_change_thresh: 15.0
+static_pos_lat_deg: 32.537118626
+static_pos_lon_deg: -85.519603413
+static_pos_alt_m: 111.3
+static_pos_check_inconsistent_thresh: 0.3
+static_pos_check_unassured_thresh: 0.7
+static_pos_check_level_period: 30.0
+static_pos_check_weight: 1.0
+
+# ===============Cn0 check parameters===========================================
+enable_cno_check: true
+cno_check_name: cno_check
+cno_filter_window: 5
+cno_check_level_period: 5.0
+cno_check_inconsistent_thresh: 5
+cno_check_unassured_thresh: 7
+cno_check_check_level_period: 5.0
+cno_check_weight: 1.0
+
+# ===============Position jump check parameters======================
+enable_pos_jump_check: true
+pos_jump_check_name: pos_jump_check
+minimum_bound: 15
+maximum_velocity: 0.0
+position_jump_check_level_period: 5.0
+position_jump_check_weight: 1.0
+
+# ===============Pos-Vel Consistency Check======================
+enable_pos_vel_cons_check: true
+pos_vel_cons_check_name: pos_vel_cons_check
+pos_vel_cons_sample_window: 10.0
+pos_vel_cons_error_thresh_scale_factor: 30.0
+pos_vel_cons_check_level_period: 1.0
+pos_vel_cons_check_inconsistent_thresh: 0.2
+pos_vel_cons_check_unassured_thresh: 0.3
+pos_vel_cons_check_weight: 0.5
+
+# ===================== AGC Check======================
+enable_agc_check: true
+agc_check_name: agc_check
+min_agc_value: 0.0
+max_agc_value: 10000
+agc_check_level_period: 3.0
+agc_check_weight: 1.0
+agc_check_inconsistent_thresh: 0.4
+agc_check_unassured_thresh: 0.5
+
+# ===================== Clock Bias Check======================
+enable_clock_bias_check: true
+clock_bias_check_name: clock_bias_check
+clock_bias_check_min_samples: 10
+clock_bias_check_max_samples: 30
+clock_bias_check_sample_window: 10
+clock_bias_check_drift_rate_bound: 0.0000005
+clock_bias_check_drift_rate_var_bound: 0.000001
+clock_bias_check_weight: 1.0
+
+# ============ Navigation Data check parameters =======================
+enable_nav_data_check: true
+nav_data_check_name: nav_data_check
+nav_data_check_weight: 0.0

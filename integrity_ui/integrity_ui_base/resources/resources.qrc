@@ -1,0 +1,35 @@
+<RCC>
+  <qresource>
+    <file>icons/gps-fix-black.png</file>
+    <file>icons/gps-fix-green.png</file>
+    <file>icons/gps-fix-red.png</file>
+    <file>icons/gps-fix-yellow.png</file>
+    <file>icons/power-button.png</file>
+    <file>icons/stopwatch-5.png</file>
+    <file>icons/firewall.png</file>
+    <file>icons/satellite-3.png</file>
+    <file>icons/bluetooth.png</file>
+    <file>icons/battery.png</file>
+    <file>icons/play-button.png</file>
+    <file>icons/record.png</file>
+    <file>icons/lightbulb.png</file>
+    <file>icons/bluetooth-1.png</file>
+    <file>icons/line-chart.png</file>
+    <file>icons/map-3.png</file>
+    <file>icons/info.png</file>
+    <file>icons/network.png</file>
+    <file>icons/share-1.png</file>
+    <file>icons/sign-1.png</file>
+    <file>icons/spotlight.png</file>
+    <file>icons/worldwide.png</file>
+    <file>icons/minus-1.png</file>
+    <file>icons/minus.png</file>
+    <file>icons/map-location.png</file>
+    <file>icons/route.png</file>
+    <file>icons/unlink.png</file>
+    <file>icons/broken-link.png</file>
+    <file>icons/link.png</file>
+    <file>icons/map.png</file>
+    <file>html/google_maps.html</file>
+  </qresource>
+</RCC>

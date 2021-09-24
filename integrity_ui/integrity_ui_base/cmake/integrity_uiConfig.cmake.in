@@ -1,0 +1,8 @@
+@PACKAGE_INIT@
+
+find_package(Qt5 COMPONENTS Widgets WebEngineWidgets Charts REQUIRED)
+find_package(pnt_integrity REQUIRED)
+
+if(NOT TARGET /@PROJECT_NAME@)
+    include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@Targets.cmake")
+endif(NOT TARGET /@PROJECT_NAME@)

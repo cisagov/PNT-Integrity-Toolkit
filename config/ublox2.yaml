@@ -1,0 +1,73 @@
+# config/ublox2.yaml
+---
+
+# 0-NOTSET, 1-DEBUG, 2-INFO, 3-WARNING, 4-ERROR, 5-CRITICAL
+max_log_display_level: 2
+
+port: /dev/ttyACM1
+baudrate: 38400
+connect_retry_period: 5
+connection_timeout: 10
+poll_for_pvt: false   #ALWAYS LEAVE FALSE ON F9
+poll_for_ephemeris: false
+poll_for_utcIono: false
+poll_for_almanac: false
+poll_for_raw: false
+
+# [PortConfiguration]
+# port_config:
+ublox_input: true
+ublox_output: true
+nmea_input: false
+nmea_output: false
+
+# [NavigationParameters]
+# nav_config:
+  # Supported dynamic models:
+  #  portable, stationary, pedestrian, automotive, sea, air1g, air2g, air4g
+dynamic_model: pedestrian
+
+# Supported fix modes: 
+#  2D, 3D, auto
+fix_mode: auto
+
+#[Messages]
+# messages:
+# For example:
+#   messages:
+#     class: [NAV, NAV, NAV, RXM, RXM]
+#     id: [NAV_PVT, NAV_SVINFO, NAV_CLOCK, RXM_RAW, RXM_RAWX]
+#     rate: [1, 1, 1, 1, 1]
+
+messages_class: [NAV, NAV, NAV, NAV, RXM, MON, RXM]
+messages_id: [NAV_PVT, NAV_TIMEGPS, NAV_CLOCK, NAV_SIG, RXM_RAWX, MON_RF, RXM_SFRB]
+messages_rate: [1, 1, 1, 1, 1, 1, 1]
+
+# Supported navigation classes
+#   ACK, AID, CFG, ESF, INF, MON, NAV, RXM, TIM 
+
+# Supported message ids (note they must be paired with the proper navigaiton class)
+#   ACK: 
+#     ACK_ACK, ACK_NAK, 
+#   AID:
+#     AID_ALM, AID_ALPSRV, AID_ALP, AID_AOP, AID_DATA, AID_EPH, AID_HUI, 
+#     AID_INI, AID_REQ
+#   CFG:
+#     CFG_ANT, CFG_CNFGR, CFG_DAT, CFG_EKF, CFG_ESFGWT, CFG_FXN, CFG_ITFM 
+#     CFG_MSG, CFG_NAV5, CFG_NAVX5, CFG_NMEA, CFG_NVS, CFG_PM2, CFG_PM, CFG_PRT 
+#     CFG_RATE, CFG_RINV, CFG_RST, CFG_RXM, CFG_SBAS, CFG_TMODE2, CFG_TMODE
+#     CFG_TP5, CFG_TP, CFG_USB
+#   ESF: 
+#     ESF_MEAS, ESF_STATUS
+#   INF:
+#     INF_DEBUG, INF_ERROR, INF_NOTICE, INF_TEST, INF_WARNING 
+#   MON:
+#     MON_HW2, MON_HW, MON_IO, MON_MSGPP, MON_RXBUF, MON_RXR, MON_TXBUF, MON_VER 
+#   MAV:
+#     NAV_AOPSTATUS, NAV_CLOCK, NAV_DGPS, NAV_DOP, NAV_EKFSTATUS, NAV_POSECEF 
+#     NAV_POSLLH, NAV_SBAS, NAV_SOL, NAV_PVT, NAV_STATUS, NAV_SVINFO, 
+#     NAV_TIMEGPS, NAV_TIMEUTC, NAV_VELECEF, NAV_VELNED 
+#   RXM:
+#     RXM_ALM, RXM_EPH, RXM_PMREQ, RXM_RAW, RXM_SFRB, RXM_SVSI 
+#   TIM:
+#     TIM_SVIN, TIM_TM2, TIM_TP, TIM_VRFY

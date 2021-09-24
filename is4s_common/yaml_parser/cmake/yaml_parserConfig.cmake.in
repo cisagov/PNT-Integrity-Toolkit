@@ -1,0 +1,9 @@
+@PACKAGE_INIT@
+
+find_package(yaml-cpp REQUIRED)
+find_package(Eigen3 REQUIRED)
+find_package(logutils REQUIRED)
+
+if(NOT TARGET @PROJECT_NAME@)
+    include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@Targets.cmake")
+endif(NOT TARGET @PROJECT_NAME@)
