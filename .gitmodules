@@ -1,0 +1,3 @@
+[submodule "PNT-Integrity"]
+	path = PNT-Integrity
+	url = https://github.com/cisagov/PNT-Integrity.git
