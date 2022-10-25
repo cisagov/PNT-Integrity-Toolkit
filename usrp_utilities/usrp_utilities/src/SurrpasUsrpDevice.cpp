@@ -28,6 +28,7 @@
 //===----------------------------------------------------------------------===//
 #include "usrp_utilities/SurrpasUsrpDevice.hpp"
 #include <boost/algorithm/string.hpp>
+#include <boost/bind.hpp>
 #include <uhd/exception.hpp>
 #include <thread>
 #include <chrono>
