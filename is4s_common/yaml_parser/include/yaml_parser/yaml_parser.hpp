@@ -62,9 +62,6 @@ public:
 
   ~YamlParser();
 
-  static YAML::Node loadYaml(const std::string&              filename,
-                             const std::vector<std::string>& searchPath);
-
   bool exists(const std::string& variableName) const;
 
   template <typename DataType>
@@ -78,27 +75,31 @@ public:
                         const DataType&    defaultValue) const;
 
 private:
-  YAML::Node yamlNode_;
+  static YAML::Node loadYaml(const std::string&       filename,
+                      const std::vector<std::string>& searchPath,
+                      const logutils::LogCallback&    log);
 
   logutils::LogCallback log_;
 
-  std::vector<std::string> searchPath_;
+  std::vector<std::string> searchPath_; // This is never used
+
+  YAML::Node yamlNode_;
 
 };  // end class YamlParser
 
 inline YamlParser::YamlParser(const std::string&              yamlFileName,
                               const logutils::LogCallback&    log,
                               const std::vector<std::string>& searchPath)
-  : yamlNode_(loadYaml(yamlFileName, searchPath))
-  , log_(log)
+  : log_(log)
   , searchPath_(searchPath)
+  , yamlNode_(loadYaml(yamlFileName, searchPath, log_))
 {
 }
 
 inline YamlParser::YamlParser(const YAML::Node&               yamlNode,
                               const logutils::LogCallback&    log,
                               const std::vector<std::string>& searchPath)
-  : yamlNode_(yamlNode), log_(log), searchPath_(searchPath)
+  : log_(log), searchPath_(searchPath), yamlNode_(yamlNode)
 {
 }
 
@@ -121,10 +122,13 @@ inline bool YamlParser::readVariable(DataType&          value,
   {
     value = yamlNode_[variableName].as<DataType>();
 
-    std::stringstream logStream;
-    logStream << "Read " << variableName << " from config file: " << value;
+    if (log_)
+    {
+      std::stringstream logStream;
+      logStream << "Read " << variableName << " from config file: " << value;
 
-    log_(logStream.str(), logutils::LogLevel::Debug3);
+      log_(logStream.str(), logutils::LogLevel::Debug3);
+    }
   }
 
   return available;
@@ -140,15 +144,18 @@ inline bool YamlParser::readVariable(std::vector<double>& value,
   {
     value = yamlNode_[variableName].as<std::vector<double> >();
 
-    std::stringstream logStream;
-    logStream << "Read " << variableName << " from config file:";
-
-    for (auto& localVal : value)
+    if (log_)
     {
-      logStream << " " << localVal;
-    }
+      std::stringstream logStream;
+      logStream << "Read " << variableName << " from config file:";
 
-    log_(logStream.str(), logutils::LogLevel::Debug3);
+      for (auto& localVal : value)
+      {
+        logStream << " " << localVal;
+      }
+
+      log_(logStream.str(), logutils::LogLevel::Debug3);
+    }
   }
 
   return available;
@@ -164,15 +171,18 @@ inline bool YamlParser::readVariable(std::vector<int>&  value,
   {
     value = yamlNode_[variableName].as<std::vector<int> >();
 
-    std::stringstream logStream;
-    logStream << "Read " << variableName << " from config file:";
-
-    for (auto& localVal : value)
+    if (log_)
     {
-      logStream << " " << localVal;
-    }
+      std::stringstream logStream;
+      logStream << "Read " << variableName << " from config file:";
 
-    log_(logStream.str(), logutils::LogLevel::Debug3);
+      for (auto& localVal : value)
+      {
+        logStream << " " << localVal;
+      }
+
+      log_(logStream.str(), logutils::LogLevel::Debug3);
+    }
   }
 
   return available;
@@ -188,15 +198,18 @@ inline bool YamlParser::readVariable(std::vector<uint8_t>& value,
   {
     value = yamlNode_[variableName].as<std::vector<uint8_t> >();
 
-    std::stringstream logStream;
-    logStream << "Read " << variableName << " from config file:";
-
-    for (auto& localVal : value)
+    if (log_)
     {
-      logStream << " " << localVal;
-    }
+      std::stringstream logStream;
+      logStream << "Read " << variableName << " from config file:";
 
-    log_(logStream.str(), logutils::LogLevel::Debug3);
+      for (auto& localVal : value)
+      {
+        logStream << " " << localVal;
+      }
+
+      log_(logStream.str(), logutils::LogLevel::Debug3);
+    }
   }
 
   return available;
@@ -212,15 +225,18 @@ inline bool YamlParser::readVariable(std::vector<std::string>& value,
   {
     value = yamlNode_[variableName].as<std::vector<std::string> >();
 
-    std::stringstream logStream;
-    logStream << "Read " << variableName << " from config file:\n";
-
-    for (auto& localVal : value)
+    if (log_)
     {
-      logStream << "  " << localVal << "\n";
-    }
+      std::stringstream logStream;
+      logStream << "Read " << variableName << " from config file:\n";
 
-    log_(logStream.str(), logutils::LogLevel::Debug3);
+      for (auto& localVal : value)
+      {
+        logStream << "  " << localVal << "\n";
+      }
+
+      log_(logStream.str(), logutils::LogLevel::Debug3);
+    }
   }
 
   return available;
@@ -243,11 +259,14 @@ inline bool YamlParser::readVariable(Eigen::VectorXd&   value,
       value(idx) = vecValue[idx];
     }
 
-    std::stringstream logStream;
-    logStream << "Read " << variableName << " from config file: ";
-    logStream << value.transpose();
+    if (log_)
+    {
+      std::stringstream logStream;
+      logStream << "Read " << variableName << " from config file: ";
+      logStream << value.transpose();
 
-    log_(logStream.str(), logutils::LogLevel::Debug3);
+      log_(logStream.str(), logutils::LogLevel::Debug3);
+    }
   }
 
   return available;
@@ -265,7 +284,9 @@ inline bool YamlParser::readVariable(Eigen::Vector3d&   value,
     {
       const std::string errorMsg = variableName + " must be length 3";
 
-      log_(errorMsg, logutils::LogLevel::Error);
+      if (log_)
+        log_(errorMsg, logutils::LogLevel::Error);
+
       throw std::runtime_error(errorMsg);
     }
 
@@ -290,7 +311,9 @@ inline bool YamlParser::readVariable(Eigen::Matrix2d&   value,
     {
       const std::string errorMsg = variableName + " must be 2 x 2";
 
-      log_(errorMsg, logutils::LogLevel::Error);
+      if (log_)
+        log_(errorMsg, logutils::LogLevel::Error);
+
       throw std::runtime_error(errorMsg);
     }
 
@@ -303,11 +326,14 @@ inline bool YamlParser::readVariable(Eigen::Matrix2d&   value,
       }
     }
 
-    std::stringstream logStream;
-    logStream << "Read " << variableName << " from config file:\n";
-    logStream << value;
+    if (log_)
+    {
+      std::stringstream logStream;
+      logStream << "Read " << variableName << " from config file:\n";
+      logStream << value;
 
-    log_(logStream.str(), logutils::LogLevel::Debug3);
+      log_(logStream.str(), logutils::LogLevel::Debug3);
+    }
   }
 
   return available;
@@ -328,7 +354,9 @@ inline bool YamlParser::readVariable(Eigen::Matrix3d&   value,
     {
       const std::string errorMsg = variableName + " must be 3 x 3";
 
-      log_(errorMsg, logutils::LogLevel::Error);
+      if (log_)
+        log_(errorMsg, logutils::LogLevel::Error);
+
       throw std::runtime_error(errorMsg);
     }
 
@@ -341,11 +369,13 @@ inline bool YamlParser::readVariable(Eigen::Matrix3d&   value,
       }
     }
 
-    std::stringstream logStream;
-    logStream << "Read " << variableName << " from config file:\n";
-    logStream << value;
-
-    log_(logStream.str(), logutils::LogLevel::Debug3);
+    if (log_)
+    {
+      std::stringstream logStream;
+      logStream << "Read " << variableName << " from config file:\n";
+      logStream << value;
+      log_(logStream.str(), logutils::LogLevel::Debug3);
+    }
   }
 
   return available;
@@ -361,7 +391,9 @@ inline DataType YamlParser::readVariable(const std::string& variableName) const
     const std::string errorMsg =
       variableName + " must be set in the config file";
 
-    log_(errorMsg, logutils::LogLevel::Error);
+    if (log_)
+      log_(errorMsg, logutils::LogLevel::Error);
+
     throw std::runtime_error(errorMsg);
   }
 

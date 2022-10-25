@@ -1,11 +1,6 @@
 cmake_minimum_required(VERSION 3.6)
-project(yaml_parser)
+project(yaml_parser VERSION 1.14.0)
 
-set (YAML_PARSER_MAJOR_VERSION 1)
-set (YAML_PARSER_MINOR_VERSION 10)
-set (YAML_PARSER_PATCH_VERSION 0)
-
-set (PROJECT_VERSION ${YAML_PARSER_MAJOR_VERSION}.${YAML_PARSER_MINOR_VERSION}.${YAML_PARSER_PATCH_VERSION})
 message (STATUS "${PROJECT_NAME} version ${PROJECT_VERSION}")
 
 ###############################################################################
@@ -33,13 +28,12 @@ add_library(${PROJECT_NAME} src/yaml_parser.cpp)
 target_include_directories(${PROJECT_NAME}
   PUBLIC 
     $<INSTALL_INTERFACE:include>
-    $<INSTALL_INTERFACE:${EIGEN3_INCLUDE_DIR}>    
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<BUILD_INTERFACE:${EIGEN3_INCLUDE_DIR}>
 )
 
 target_link_libraries(${PROJECT_NAME}
   PUBLIC
+    Eigen3::Eigen
     yaml-cpp
     logutils
 )

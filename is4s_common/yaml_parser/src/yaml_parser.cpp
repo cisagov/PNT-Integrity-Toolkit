@@ -42,11 +42,17 @@
 namespace yaml_parser
 {
 YAML::Node YamlParser::loadYaml(const std::string&              filename,
-                                const std::vector<std::string>& searchPath)
+                                const std::vector<std::string>& searchPath,
+                                const logutils::LogCallback&    log)
 {
-  if (searchPath.size() > 0)
+  // Build a list of files, first successufully loaded file will be returned
+  std::vector<std::string> filesToTry;
+  if (searchPath.empty())
   {
-    YAML::Node node;
+    filesToTry.push_back(filename);
+  }
+  else
+  {
     for (auto path : searchPath)
     {
       // make sure the path ends in a trailing /
@@ -55,40 +61,34 @@ YAML::Node YamlParser::loadYaml(const std::string&              filename,
       {
         path = path + "/";
       }
-      try
-      {
-        std::cout << "Load file: " << path + filename << std::endl;
-        node = YAML::LoadFile(path + filename);
-        std::cout << "Found" << std::endl;
-        return node;
-      }
-      catch (YAML::BadFile& exc)
-      {
-        std::cout << "Not found" << std::endl;
-      }
+      filesToTry.push_back(path + filename);
     }
-
-    throw YAML::BadFile();
   }
-  else
+
+  YAML::Node node;
+  for (auto yamlFile : filesToTry)
   {
     try
     {
-      std::cout << "Load file: " << filename << std::endl;
-
-      const YAML::Node node = YAML::LoadFile(filename);
-
-      std::cout << "Found" << std::endl;
-
+      node = YAML::LoadFile(yamlFile);
+      if (log)
+        log("YamlParser::loadYaml(): File found", logutils::LogLevel::Debug);
       return node;
     }
     catch (YAML::BadFile& exc)
     {
-      std::cout << "Not found" << std::endl;
+      if (log)
+        log("YamlParser::loadYaml(): File not found: " + yamlFile,
+            logutils::LogLevel::Warn);
+      continue;
     }
-
-    throw YAML::BadFile();
   }
+
+  if (log)
+    log("YamlParser::loadYaml(): Unable to find " + filename,
+        logutils::LogLevel::Error);
+
+  throw std::runtime_error("YamlParser::loadYaml(): Unable to find file");
 }
 
 }  // namespace yaml_parser
