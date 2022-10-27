@@ -101,7 +101,7 @@ if(BUILD_EXAMPLES)
       ${Boost_LIBRARIES}
   )
   message(STATUS "uhd_VERSION = ${UHD_VERSION}")
-  if(uhd_VERSION VERSION_LESS "3.11")
+  if(${UHD_VERSION} VERSION_LESS 3.11.0)
     # For versions older that 3.11, file <uhd/utils/thread.hpp> doesn't exist, 
     # uses <uhd/utils/thread_priority.hpp> insteads
     message(STATUS "set WITH_UHD_VERSION_LESS_3_11")
@@ -121,11 +121,13 @@ if(BUILD_EXAMPLES)
       ${UHD_LIBRARIES} 
       ${Boost_LIBRARIES}
   )
-    # For versions older that 3.11, file <uhd/utils/thread.hpp> doesn't exist, 
-    # uses <uhd/utils/thread_priority.hpp> insteads
-    message(STATUS "set WITH_UHD_VERSION_LESS_3_11")
-    target_compile_definitions(surrpas_playback_from_file 
-      PRIVATE WITH_UHD_VERSION_LESS_3_11=1)
+  if(${UHD_VERSION} VERSION_LESS 3.11.0)
+  # For versions older that 3.11, file <uhd/utils/thread.hpp> doesn't exist, 
+  # uses <uhd/utils/thread_priority.hpp> insteads
+  message(STATUS "set WITH_UHD_VERSION_LESS_3_11")
+  target_compile_definitions(surrpas_playback_from_file 
+    PRIVATE WITH_UHD_VERSION_LESS_3_11=1)
+endif()
 
 endif(BUILD_EXAMPLES)
 
