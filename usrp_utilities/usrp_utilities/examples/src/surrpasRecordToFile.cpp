@@ -22,7 +22,13 @@
 // Modified from rx_samples_to_file
 #include <uhd/types/tune_request.hpp>
 #include <uhd/types/time_spec.hpp>
-#include <uhd/utils/thread.hpp>
+
+#ifdef WITH_UHD_VERSION_LESS_3_11
+  #include <uhd/utils/thread_priority.hpp>
+#else
+  #include <uhd/utils/thread.hpp>
+#endif
+
 #include <uhd/utils/safe_main.hpp>
 #include <uhd/usrp/multi_usrp.hpp>
 #include <uhd/exception.hpp>

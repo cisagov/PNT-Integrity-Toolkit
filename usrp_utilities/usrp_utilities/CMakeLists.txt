@@ -25,7 +25,15 @@ cmake_policy(SET CMP0057 NEW)
 ###############################################################################
 find_package(logutils REQUIRED)
 find_package(if_utils REQUIRED)
-find_package(UHD REQUIRED)
+
+# find_package(UHD REQUIRED)
+find_package(uhd QUIET)
+# On Ubuntu 18.04, UHD found w/ PkgConfig
+if(NOT uhd_FOUND)
+  find_package(PkgConfig REQUIRED)
+  pkg_check_modules(UHD REQUIRED uhd)
+endif(NOT uhd_FOUND)
+
 find_package(Boost REQUIRED COMPONENTS system thread program_options date_time filesystem)
 
 ###############################################################################
@@ -92,6 +100,14 @@ if(BUILD_EXAMPLES)
       ${UHD_LIBRARIES} 
       ${Boost_LIBRARIES}
   )
+  message(STATUS "uhd_VERSION = ${UHD_VERSION}")
+  if(uhd_VERSION VERSION_LESS "3.11")
+    # For versions older that 3.11, file <uhd/utils/thread.hpp> doesn't exist, 
+    # uses <uhd/utils/thread_priority.hpp> insteads
+    message(STATUS "set WITH_UHD_VERSION_LESS_3_11")
+    target_compile_definitions(surrpas_record_to_file 
+      PRIVATE WITH_UHD_VERSION_LESS_3_11=1)
+  endif()
 
   add_executable(surrpas_playback_from_file examples/src/surrpasPlaybackFromFile.cpp)
   target_include_directories(surrpas_playback_from_file
@@ -105,6 +121,12 @@ if(BUILD_EXAMPLES)
       ${UHD_LIBRARIES} 
       ${Boost_LIBRARIES}
   )
+    # For versions older that 3.11, file <uhd/utils/thread.hpp> doesn't exist, 
+    # uses <uhd/utils/thread_priority.hpp> insteads
+    message(STATUS "set WITH_UHD_VERSION_LESS_3_11")
+    target_compile_definitions(surrpas_playback_from_file 
+      PRIVATE WITH_UHD_VERSION_LESS_3_11=1)
+
 endif(BUILD_EXAMPLES)
 
 ###############################################################################
